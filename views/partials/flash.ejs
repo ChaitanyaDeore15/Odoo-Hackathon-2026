@@ -1,0 +1,11 @@
+<%# Flash message partial %>
+    <% if (success && success.length) { %>
+        <% success.forEach(msg=> { %>
+            <div class="alert alert-success">✅ <%- msg %></div>
+            <% }) %>
+                <% } %>
+                    <% if (error && error.length) { %>
+                        <% error.forEach(msg=> { %>
+                            <div class="alert alert-error">⚠️ <%- msg %></div>
+                            <% }) %>
+                                <% } %>

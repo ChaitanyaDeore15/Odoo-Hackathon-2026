@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+
+                            <!-- KPI Cards (live via AJAX) -->
+                            <div class="kpi-grid" id="kpi-container">
+                                <div class="kpi-card kpi-loading">
+                                    <div class="kpi-icon blue">🚐</div>
+                                    <div>
+                                        <div class="kpi-value" id="kpi-active-fleet">—</div>
+                                        <div class="kpi-label">Active Fleet</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-card kpi-loading">
+                                    <div class="kpi-icon orange">🔧</div>
+                                    <div>
+                                        <div class="kpi-value" id="kpi-maintenance-alerts">—</div>
+                                        <div class="kpi-label">Maintenance Alerts</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-card kpi-loading">
+                                    <div class="kpi-icon green">📊</div>
+                                    <div>
+                                        <div class="kpi-value" id="kpi-utilization-rate">—</div>
+                                        <div class="kpi-label">Utilization Rate</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-card kpi-loading">
+                                    <div class="kpi-icon cyan">📦</div>
+                                    <div>
+                                        <div class="kpi-value" id="kpi-pending-cargo">—</div>
+                                        <div class="kpi-label">Pending Trips</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Links -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>⚡ Quick Actions</h2>
+                                </div>
+                                <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap;">
+                                    <a href="/vehicles/add" class="btn btn-primary">+ Add Vehicle</a>
+                                    <a href="/drivers/add" class="btn btn-outline">+ Add Driver</a>
+                                    <a href="/trips/add" class="btn btn-outline">+ Dispatch Trip</a>
+                                    <a href="/maintenance/add" class="btn btn-outline">+ Log Maintenance</a>
+                                    <a href="/fuel/add" class="btn btn-outline">+ Log Fuel</a>
+                                </div>
+                            </div>
+
+                            <!-- Role Info -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>🔐 Your Access Level</h2>
+                                </div>
+                                <div class="card-body">
+                                    <p>You are signed in as <strong>
+                                            <%= user.name %>
+                                        </strong> with role <span class="badge badge-<%= user.role %>">
+                                            <%= user.role.replace('_',' ') %></span>.</p>
+          <br/>
+          <% const roleAccess = {
+            manager:       ' Full access to all modules.', dispatcher: 'Access: Vehicles + Trip Dispatcher.' ,
+                                                safety_officer:'Access: Drivers + Maintenance.',
+                                                analyst: 'Access: Expenses + Analytics.' }; %>
+                                                <p style="color:var(--text-muted);font-size:.875rem;">
+                                                    <%= roleAccess[user.role] || '' %>
+                                                </p>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

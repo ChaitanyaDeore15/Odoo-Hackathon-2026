@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>+ Log Fuel</h1>
+                                    <p><a href="/fuel">← Back to Expenses</a></p>
+                                </div>
+                            </div>
+                            <div class="card" style="max-width:480px;">
+                                <div class="card-body">
+                                    <form method="POST" action="/fuel/add">
+                                        <div class="form-group">
+                                            <label>Vehicle</label>
+                                            <select name="vehicle_id" required>
+                                                <option value="">Select vehicle</option>
+                                                <% vehicles.forEach(v=> { %>
+                                                    <option value="<%= v.id %>">
+                                                        <%= v.license_plate %> — <%= v.model %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Liters</label>
+                                                <input type="number" name="liters" step="0.1" min="0.1"
+                                                    placeholder="40.0" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Cost (₹)</label>
+                                                <input type="number" name="cost" step="0.01" min="0"
+                                                    placeholder="3600.00" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Date</label>
+                                            <input type="date" name="date"
+                                                value="<%= new Date().toISOString().split('T')[0] %>" required />
+                                        </div>
+                                        <div style="display:flex;gap:10px;margin-top:8px;">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <a href="/fuel" class="btn btn-outline">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

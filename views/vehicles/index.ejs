@@ -1,0 +1,97 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>🚐 Vehicle Registry</h1>
+                                    <p>Manage your fleet vehicles</p>
+                                </div>
+                                <a href="/vehicles/add" class="btn btn-primary">+ Add Vehicle</a>
+                            </div>
+
+                            <!-- Filter Bar -->
+                            <form method="GET" action="/vehicles" class="filter-bar">
+                                <input type="text" name="search" placeholder="🔍 Search plate, model…"
+                                    value="<%= query.search || '' %>" />
+                                <select name="status">
+                                    <option value="">All Statuses</option>
+                                    <option value="available" <%- query.status==='available' ? 'selected' :'' %>
+                                        >Available</option>
+                                    <option value="on_trip" <%- query.status==='on_trip' ? 'selected' :'' %>>On Trip
+                                    </option>
+                                    <option value="in_shop" <%- query.status==='in_shop' ? 'selected' :'' %>>In Shop
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-outline">Filter</button>
+                                <a href="/vehicles" class="btn btn-outline">Reset</a>
+                            </form>
+
+                            <div class="card">
+                                <div class="card-body" style="padding:0;">
+                                    <div class="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th><a
+                                                            href="?sort=license_plate&order=<%= query.order==='ASC'?'DESC':'ASC' %>">Plate
+                                                            ⇅</a></th>
+                                                    <th><a
+                                                            href="?sort=model&order=<%= query.order==='ASC'?'DESC':'ASC' %>">Model
+                                                            ⇅</a></th>
+                                                    <th>Type</th>
+                                                    <th>Max Capacity (t)</th>
+                                                    <th>Odometer (km)</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (vehicles.length===0) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="7">No vehicles found.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% vehicles.forEach(v=> { %>
+                                                            <tr>
+                                                                <td><strong>
+                                                                        <%= v.license_plate %>
+                                                                    </strong></td>
+                                                                <td>
+                                                                    <%= v.model %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= v.type %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= parseFloat(v.max_capacity).toFixed(1) %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= parseInt(v.odometer).toLocaleString() %>
+                                                                </td>
+                                                                <td><span class="badge badge-<%= v.status %>">
+                                                                        <%= v.status.replace('_',' ') %></span></td>
+                      <td>
+                        <div class="table-actions">
+                          <a href="/vehicles/edit/<%= v.id %>" class="btn btn-outline btn-sm">✏️ Edit</a>
+                          <form method="POST" action="/vehicles/delete/<%= v.id %>" data-confirm="Delete this vehicle?">
+                            <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/main.js"></script>
+</body></html>

@@ -1,0 +1,125 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>🗺️ Trip Dispatcher</h1>
+                                    <p>Manage and dispatch trips</p>
+                                </div>
+                                <a href="/trips/add" class="btn btn-primary">+ Create Trip</a>
+                            </div>
+                            <form method="GET" action="/trips" class="filter-bar">
+                                <input type="text" name="search" placeholder="🔍 Origin, destination, plate…"
+                                    value="<%= query.search || '' %>" />
+                                <select name="status">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" <%- query.status==='pending' ?'selected':'' %>>Pending
+                                    </option>
+                                    <option value="dispatched" <%- query.status==='dispatched' ?'selected':'' %>
+                                        >Dispatched</option>
+                                    <option value="completed" <%- query.status==='completed' ?'selected':'' %>>Completed
+                                    </option>
+                                    <option value="cancelled" <%- query.status==='cancelled' ?'selected':'' %>>Cancelled
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-outline">Filter</button>
+                                <a href="/trips" class="btn btn-outline">Reset</a>
+                            </form>
+                            <div class="card">
+                                <div class="card-body" style="padding:0;">
+                                    <div class="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Vehicle</th>
+                                                    <th>Driver</th>
+                                                    <th>Origin</th>
+                                                    <th>Destination</th>
+                                                    <th>Cargo (t)</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (trips.length===0) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="8">No trips found.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% trips.forEach(t=> { %>
+                                                            <tr>
+                                                                <td>#<%= t.id %>
+                                                                </td>
+                                                                <td><strong>
+                                                                        <%= t.license_plate %>
+                                                                    </strong><br /><span
+                                                                        style="font-size:.75rem;color:var(--text-muted);">
+                                                                        <%= t.model %>
+                                                                    </span></td>
+                                                                <td>
+                                                                    <%= t.driver_name %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= t.origin %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= t.destination %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= parseFloat(t.cargo_weight).toFixed(1) %>
+                                                                </td>
+                                                                <td><span class="badge badge-<%= t.status %>">
+                                                                        <%= t.status %>
+                                                                    </span></td>
+                                                                <td>
+                                                                    <div class="table-actions">
+                                                                        <% if (t.status==='pending' ) { %>
+                                                                            <form method="POST"
+                                                                                action="/trips/dispatch/<%= t.id %>"
+                                                                                data-confirm="Dispatch this trip?">
+                                                                                <button class="btn btn-primary btn-sm">▶
+                                                                                    Dispatch</button>
+                                                                            </form>
+                                                                            <form method="POST"
+                                                                                action="/trips/cancel/<%= t.id %>"
+                                                                                data-confirm="Cancel this trip?">
+                                                                                <button class="btn btn-danger btn-sm">✗
+                                                                                    Cancel</button>
+                                                                            </form>
+                                                                            <% } %>
+                                                                                <% if (t.status==='dispatched' ) { %>
+                                                                                    <form method="POST"
+                                                                                        action="/trips/complete/<%= t.id %>"
+                                                                                        data-confirm="Mark as completed?">
+                                                                                        <button
+                                                                                            class="btn btn-success btn-sm">✓
+                                                                                            Complete</button>
+                                                                                    </form>
+                                                                                    <% } %>
+                                                                                        <% if (t.attachment_path) { %>
+                                                                                            <a href="/<%= t.attachment_path.replace(/\\/g,'/') %>"
+                                                                                                target="_blank"
+                                                                                                class="btn btn-outline btn-sm">📎</a>
+                                                                                            <% } %>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

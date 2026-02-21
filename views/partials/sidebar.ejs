@@ -1,0 +1,43 @@
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-icon">🚛</div>
+        <div>
+            <h2>FleetOps</h2>
+            <small>Management System</small>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-group-label">Main</div>
+        <a href="/dashboard" class="nav-item"><span class="icon">📊</span> Dashboard</a>
+        <a href="/vehicles" class="nav-item"><span class="icon">🚐</span> Vehicle Registry</a>
+        <a href="/drivers" class="nav-item"><span class="icon">👤</span> Drivers</a>
+        <a href="/trips" class="nav-item"><span class="icon">🗺️</span> Trip Dispatcher</a>
+
+        <div class="nav-group-label">Operations</div>
+        <a href="/maintenance" class="nav-item"><span class="icon">🔧</span> Maintenance</a>
+        <a href="/fuel" class="nav-item"><span class="icon">⛽</span> Expenses</a>
+
+        <div class="nav-group-label">Reports</div>
+        <a href="/analytics" class="nav-item"><span class="icon">📈</span> Analytics</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <% if (user) { %>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+                <div>
+                    <div class="name">
+                        <%= user.name %>
+                    </div>
+                    <div class="role badge badge-<%= user.role %>">
+                        <%= user.role.replace('_',' ') %></div>
+      </div>
+    </div>
+    <a href="/logout" class="logout-btn">🚪 Logout</a>
+    <% } %>
+  </div>
+</div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;"></div>

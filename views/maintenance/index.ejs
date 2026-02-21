@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>🔧 Maintenance</h1>
+                                    <p>Track vehicle maintenance</p>
+                                </div>
+                                <a href="/maintenance/add" class="btn btn-primary">+ Log Issue</a>
+                            </div>
+                            <form method="GET" action="/maintenance" class="filter-bar">
+                                <input type="text" name="search" placeholder="🔍 Issue, plate…"
+                                    value="<%= query.search || '' %>" />
+                                <select name="status">
+                                    <option value="">All</option>
+                                    <option value="open" <%- query.status==='open' ?'selected':'' %>>Open</option>
+                                    <option value="resolved" <%- query.status==='resolved' ?'selected':'' %>>Resolved
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-outline">Filter</button>
+                                <a href="/maintenance" class="btn btn-outline">Reset</a>
+                            </form>
+                            <div class="card">
+                                <div class="card-body" style="padding:0;">
+                                    <div class="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Vehicle</th>
+                                                    <th>Issue</th>
+                                                    <th>Cost (₹)</th>
+                                                    <th>Service Date</th>
+                                                    <th>Status</th>
+                                                    <th>Receipt</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (records.length===0) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="7">No maintenance records found.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% records.forEach(r=> { %>
+                                                            <tr>
+                                                                <td><strong>
+                                                                        <%= r.license_plate %>
+                                                                    </strong><br /><span
+                                                                        style="font-size:.75rem;color:var(--text-muted);">
+                                                                        <%= r.model %>
+                                                                    </span></td>
+                                                                <td>
+                                                                    <%= r.issue %>
+                                                                </td>
+                                                                <td>₹<%= parseFloat(r.cost).toLocaleString('en-IN') %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= new
+                                                                        Date(r.service_date).toLocaleDateString('en-IN')
+                                                                        %>
+                                                                </td>
+                                                                <td><span class="badge badge-<%= r.status %>">
+                                                                        <%= r.status %>
+                                                                    </span></td>
+                                                                <td>
+                                                                    <%= r.receipt_path ? '📄 Yes' : '—' %>
+                                                                </td>
+                                                                <td>
+                                                                    <% if (r.status==='open' ) { %>
+                                                                        <form method="POST"
+                                                                            action="/maintenance/resolve/<%= r.id %>"
+                                                                            data-confirm="Mark as resolved? Vehicle will be set to Available.">
+                                                                            <button class="btn btn-success btn-sm">✓
+                                                                                Resolve</button>
+                                                                        </form>
+                                                                        <% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

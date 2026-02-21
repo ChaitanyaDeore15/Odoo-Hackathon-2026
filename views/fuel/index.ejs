@@ -1,0 +1,128 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>⛽ Expenses</h1>
+                                    <p>Fuel logs and cost overview</p>
+                                </div>
+                                <a href="/fuel/add" class="btn btn-primary">+ Log Fuel</a>
+                            </div>
+
+                            <!-- Expense Summary Cards -->
+                            <div class="kpi-grid" style="margin-bottom:24px;">
+                                <div class="kpi-card">
+                                    <div class="kpi-icon blue">⛽</div>
+                                    <div>
+                                        <div class="kpi-value">₹<%= totals.total_fuel ?
+                                                parseFloat(totals.total_fuel).toLocaleString('en-IN') : '0' %>
+                                        </div>
+                                        <div class="kpi-label">Total Fuel Cost</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-icon orange">🔧</div>
+                                    <div>
+                                        <div class="kpi-value">₹<%= totals.total_maintenance ?
+                                                parseFloat(totals.total_maintenance).toLocaleString('en-IN') : '0' %>
+                                        </div>
+                                        <div class="kpi-label">Total Maintenance Cost</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Monthly Summary -->
+                            <% if (monthly.length> 0) { %>
+                                <div class="card" style="margin-bottom:24px;">
+                                    <div class="card-header">
+                                        <h2>📅 Monthly Fuel Summary</h2>
+                                    </div>
+                                    <div class="card-body" style="padding:0;">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Month</th>
+                                                    <th>Liters</th>
+                                                    <th>Cost (₹)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% monthly.forEach(m=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= m.month %>
+                                                        </td>
+                                                        <td>
+                                                            <%= parseFloat(m.liters).toFixed(1) %>L
+                                                        </td>
+                                                        <td>₹<%= parseFloat(m.fuel_cost).toLocaleString('en-IN') %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                    <!-- Fuel Log Table -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2>All Fuel Logs</h2>
+                                        </div>
+                                        <div class="card-body" style="padding:0;">
+                                            <div class="table-wrapper">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Vehicle</th>
+                                                            <th>Liters</th>
+                                                            <th>Cost (₹)</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if (logs.length===0) { %>
+                                                            <tr class="empty-row">
+                                                                <td colspan="5">No fuel logs yet.</td>
+                                                            </tr>
+                                                            <% } else { %>
+                                                                <% logs.forEach(l=> { %>
+                                                                    <tr>
+                                                                        <td>#<%= l.id %>
+                                                                        </td>
+                                                                        <td><strong>
+                                                                                <%= l.license_plate %>
+                                                                            </strong> — <%= l.model %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= parseFloat(l.liters).toFixed(1) %>L
+                                                                        </td>
+                                                                        <td>₹<%= parseFloat(l.cost).toLocaleString('en-IN')
+                                                                                %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= new
+                                                                                Date(l.date).toLocaleDateString('en-IN')
+                                                                                %>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% }) %>
+                                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

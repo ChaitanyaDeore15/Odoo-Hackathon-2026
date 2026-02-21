@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>+ Create Trip</h1>
+                                    <p><a href="/trips">← Back to Trips</a></p>
+                                </div>
+                            </div>
+                            <div class="card" style="max-width:620px;">
+                                <div class="card-body">
+                                    <form method="POST" action="/trips/add" enctype="multipart/form-data">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Vehicle (Available only)</label>
+                                                <select name="vehicle_id" required>
+                                                    <option value="">Select vehicle</option>
+                                                    <% vehicles.forEach(v=> { %>
+                                                        <option value="<%= v.id %>">
+                                                            <%= v.license_plate %> — <%= v.model %> (max <%=
+                                                                        v.max_capacity %>t)
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Driver (Available, valid license)</label>
+                                                <select name="driver_id" required>
+                                                    <option value="">Select driver</option>
+                                                    <% drivers.forEach(d=> { %>
+                                                        <option value="<%= d.id %>">
+                                                            <%= d.name %> (Score: <%= d.safety_score %>)
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Origin</label>
+                                                <input type="text" name="origin" placeholder="Mumbai" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Destination</label>
+                                                <input type="text" name="destination" placeholder="Pune" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cargo Weight (tonnes)</label>
+                                            <input type="number" name="cargo_weight" step="0.1" min="0.1"
+                                                placeholder="2.5" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Attachment (optional)</label>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" name="attachment"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" />
+                                                <span class="file-name"
+                                                    style="font-size:.8rem;color:var(--text-muted);margin-top:4px;display:block;">No
+                                                    file chosen</span>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:10px;margin-top:8px;">
+                                            <button type="submit" class="btn btn-primary">Create Trip</button>
+                                            <a href="/trips" class="btn btn-outline">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

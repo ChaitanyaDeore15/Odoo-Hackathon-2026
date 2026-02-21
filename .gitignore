@@ -1,0 +1,9 @@
+node_modules/
+.env
+uploads/receipts/*
+uploads/driver-docs/*
+uploads/trip-attachments/*
+!uploads/receipts/.gitkeep
+!uploads/driver-docs/.gitkeep
+!uploads/trip-attachments/.gitkeep
+*.log

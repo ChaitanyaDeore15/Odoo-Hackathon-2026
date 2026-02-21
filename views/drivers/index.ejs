@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>👤 Drivers</h1>
+                                    <p>Manage licensed drivers</p>
+                                </div>
+                                <a href="/drivers/add" class="btn btn-primary">+ Add Driver</a>
+                            </div>
+                            <form method="GET" action="/drivers" class="filter-bar">
+                                <input type="text" name="search" placeholder="🔍 Name or license…"
+                                    value="<%= query.search || '' %>" />
+                                <select name="status">
+                                    <option value="">All Statuses</option>
+                                    <option value="available" <%=query.status==='available' ? 'selected' : '' %>
+                                        >Available</option>
+                                    <option value="on_trip" <%=query.status==='on_trip' ? 'selected' : '' %>>On Trip
+                                    </option>
+                                    <option value="inactive" <%=query.status==='inactive' ? 'selected' : '' %>>Inactive
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-outline">Filter</button>
+                                <a href="/drivers" class="btn btn-outline">Reset</a>
+                            </form>
+                            <div class="card">
+                                <div class="card-body" style="padding:0;">
+                                    <div class="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>License No.</th>
+                                                    <th>License Expiry</th>
+                                                    <th>Safety Score</th>
+                                                    <th>Status</th>
+                                                    <th>Document</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (drivers.length===0) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="7">No drivers found.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% drivers.forEach(d=> {
+                                                            const expDate = new Date(d.license_expiry);
+                                                            const today = new Date();
+                                                            const expired = expDate < today; const expiring=!expired &&
+                                                                (expDate - today) < 30 * 24 * 60 * 60 * 1000; %>
+                                                                <tr>
+                                                                    <td><strong>
+                                                                            <%= d.name %>
+                                                                        </strong></td>
+                                                                    <td>
+                                                                        <%= d.license_number %>
+                                                                    </td>
+                                                                    <td
+                                                                        class="<%= expired?'text-danger':expiring?'text-warning':'' %>">
+                                                                        <%= expDate.toISOString().split('T')[0] %>
+                                                                            <% if (expired) { %> <span
+                                                                                    style="font-size:.7rem;">(Expired)</span>
+                                                                                <% } %>
+                                                                                    <% if (expiring) { %> <span
+                                                                                            style="font-size:.7rem;">(Expiring)</span>
+                                                                                        <% } %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <% let scoreColor='var(--danger)' ; if
+                                                                            (d.safety_score>= 80) scoreColor =
+                                                                            'var(--success)';
+                                                                            else if (d.safety_score >= 50) scoreColor =
+                                                                            'var(--warning)';
+                                                                            %>
+                                                                            <span
+                                                                                style="font-weight:600;color:<%= scoreColor %>">
+                                                                                <%= d.safety_score %>/100
+                                                                            </span>
+                                                                    </td>
+                                                                    <td><span class="badge badge-<%= d.status %>">
+                                                                            <%= d.status.replace('_',' ') %></span></td>
+                      <td><%= d.document_path ? ' 📄 Uploaded' : '—' %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="table-actions">
+                                                                            <a href="/drivers/edit/<%= d.id %>"
+                                                                                class="btn btn-outline btn-sm">✏️
+                                                                                Edit</a>
+                                                                            <form method="POST"
+                                                                                action="/drivers/delete/<%= d.id %>"
+                                                                                data-confirm="Delete this driver?">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-danger btn-sm">🗑️</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }) %>
+                                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>

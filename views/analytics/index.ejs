@@ -1,0 +1,233 @@
+<%- include('../partials/header') %>
+    <div class="app-wrapper">
+        <%- include('../partials/sidebar') %>
+            <div class="main-content">
+                <%- include('../partials/topbar') %>
+                    <div class="page-body">
+                        <%- include('../partials/flash') %>
+                            <div class="page-header">
+                                <div>
+                                    <h1>📈 Analytics</h1>
+                                    <p>Fleet performance reports</p>
+                                </div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <!-- Trips by Driver -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>🏆 Trips by Driver</h2>
+                                    </div>
+                                    <div class="card-body" style="padding:0;">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Driver</th>
+                                                    <th>Trips</th>
+                                                    <th>Total Cargo (t)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (!tripsByDriver.length) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="3">No trip data yet.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% tripsByDriver.forEach(r=> { %>
+                                                            <tr>
+                                                                <td><strong>
+                                                                        <%= r.driver_name %>
+                                                                    </strong></td>
+                                                                <td>
+                                                                    <%= r.total_trips %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= r.total_cargo ?
+                                                                        parseFloat(r.total_cargo).toFixed(1) : '0' %>t
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Fuel by Vehicle -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>⛽ Fuel Cost by Vehicle</h2>
+                                    </div>
+                                    <div class="card-body" style="padding:0;">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Vehicle</th>
+                                                    <th>Fuel Cost (₹)</th>
+                                                    <th>Liters</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (!fuelByVehicle.length) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="3">No fuel data yet.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% fuelByVehicle.forEach(r=> { %>
+                                                            <tr>
+                                                                <td><strong>
+                                                                        <%= r.license_plate %>
+                                                                    </strong>
+                                                                    <%= r.model %>
+                                                                </td>
+                                                                <td>₹<%= parseFloat(r.fuel_cost).toLocaleString('en-IN')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= parseFloat(r.liters).toFixed(1) %>L
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Maintenance by Vehicle -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>🔧 Maintenance by Vehicle</h2>
+                                    </div>
+                                    <div class="card-body" style="padding:0;">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Vehicle</th>
+                                                    <th>Incidents</th>
+                                                    <th>Maint. Cost (₹)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (!maintenanceByVehicle.length) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="3">No maintenance data yet.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% maintenanceByVehicle.forEach(r=> { %>
+                                                            <tr>
+                                                                <td><strong>
+                                                                        <%= r.license_plate %>
+                                                                    </strong>
+                                                                    <%= r.model %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= r.incidents %>
+                                                                </td>
+                                                                <td>₹<%= parseFloat(r.maint_cost).toLocaleString('en-IN')
+                                                                        %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Monthly Trips -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>📅 Trips by Month</h2>
+                                    </div>
+                                    <div class="card-body" style="padding:0;">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Month</th>
+                                                    <th>Trips</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (!tripsByMonth.length) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="2">No trip data yet.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% tripsByMonth.forEach(r=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= r.month %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= r.trips %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Audit Log -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>🔐 Recent Audit Log</h2>
+                                </div>
+                                <div class="card-body" style="padding:0;">
+                                    <div class="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>User</th>
+                                                    <th>Action</th>
+                                                    <th>Entity</th>
+                                                    <th>Detail</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (!recentAudit.length) { %>
+                                                    <tr class="empty-row">
+                                                        <td colspan="5">No audit entries yet.</td>
+                                                    </tr>
+                                                    <% } else { %>
+                                                        <% recentAudit.forEach(a=> { %>
+                                                            <tr>
+                                                                <td style="font-size:.78rem;white-space:nowrap;">
+                                                                    <%= new Date(a.created_at).toLocaleString('en-IN')
+                                                                        %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= a.user_name || '—' %>
+                                                                </td>
+                                                                <td><span
+                                                                        style="font-family:monospace;font-size:.78rem;background:var(--surface-2);padding:2px 6px;border-radius:4px;">
+                                                                        <%= a.action %>
+                                                                    </span></td>
+                                                                <td>
+                                                                    <%= a.entity || '—' %>
+                                                                        <% if (a.entity_id) { %>#<%= a.entity_id %>
+                                                                                <% } %>
+                                                                </td>
+                                                                <td style="font-size:.8rem;color:var(--text-muted);">
+                                                                    <%= a.detail || '—' %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+            </div>
+    </div>
+    <script src="/js/main.js"></script>
+    </body>
+
+    </html>
